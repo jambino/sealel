@@ -11,7 +11,6 @@
     - role: unsubscribe
       when: ansible_distribution == 'RedHat'
     - role: reset_nic 
-    - role: reset_nic 
     - role: hostname
       vars:
         new_hostname: 'localhost.localdomain'
