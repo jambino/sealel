@@ -1,0 +1,18 @@
+---
+- name: Collect list of host keys used for SSH
+  ansible.builtin.find:
+    paths: /etc/ssh/
+    patterns: 'ssh_host_*'
+  register: hostkeys
+
+- name: Debug hostkeys when verbosity is 2 or higher
+  debug:
+    var: hostkeys
+    verbosity: 2
+
+- name: Remove host keys
+  ansible.builtin.file:
+    path: '{{ item["path"] }}'
+    state: absent
+  loop: '{{ hostkeys["files"] }}'
+
