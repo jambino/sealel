@@ -1,0 +1,13 @@
+---
+- name: Unsubscribe from Red Hat
+  community.general.redhat_subscription:
+    state: absent
+
+- name: Remove lingering subscriptions
+  ansible.builtin.command:
+    cmd: subscription-manager remove --all
+
+- name: Clean up local data
+  ansible.builtin.command:
+    cmd: subscription-manager clean
+

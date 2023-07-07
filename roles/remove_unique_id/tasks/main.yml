@@ -1,0 +1,12 @@
+---
+- name: Remove machine-id file (EL 8)
+  ansible.builtin.file:
+    path: /var/lib/dbus/machine-id
+    state: absent
+  when: ansible_distribution_major_version == 8
+  
+- name: Uninitialize machine-id (EL 8)
+  ansible.builtin.copy:
+    dest: /etc/machine-id
+    content: 'uninitialized'
+

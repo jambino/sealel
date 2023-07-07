@@ -1,0 +1,12 @@
+---
+- name: Collect UDEV rules files
+  ansible.builtin.find:
+    paths: /etc/udev/rules.d/
+    patterns: '70-persistent*'
+  register: udevrulesfiles
+
+- name: Remove UDEV rules files
+  ansible.builtin.file:
+    path: '{{ item["path"] }}'
+    state: absent
+  loop: '{{ udevrulesfiles["files"] }}'

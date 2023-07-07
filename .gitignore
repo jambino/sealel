@@ -1,5 +1,7 @@
 *.retry
 
+hosts*
+
 .env
 .venv
 env/

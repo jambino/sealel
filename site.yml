@@ -1,0 +1,43 @@
+---
+# Information in this playbook and associated roles is taken from 
+# the access.redhat.com article which can be found at: 
+# https://access.redhat.com/solutions/5793031
+# This playbook should work with Enterprise Linux versions 8 & 9
+# without any modification. 
+#
+# Galaxy requirements:
+# community.general 
+# `ansible-galaxy collection install community.general`
+
+- name: Seal an Enterprise Linux VM to Prepare it as a Template
+  hosts: all
+  become: true
+  vars:
+    new_hostname: 'localhost.localdomain'
+
+  tasks: 
+    - name: Reset Hostname
+      ansible.builtin.hostname:
+        name: '{{ new_hostname }}'
+        use: systemd
+
+    
+  roles:
+    - role: unsubscribe
+      when: ansible_distribution == 'RedHat'
+    - role: reset_nic 
+    - role: remove_udev_rules
+    - role: remove_unique_id
+    - role: remove_satellite
+    - role: remove_iscsi_init
+    - role: remove_host_keys
+
+  post_tasks:
+    - name: Clear superuser history
+      ansible.builtin.shell:
+        cmd: history -c
+
+    - name: Poweroff
+      community.general.shutdown:
+        msg: 'Shutdown initiated as part of VM sealing for template'
+

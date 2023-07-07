@@ -1,0 +1,5 @@
+---
+- name: Remove iSCSI initiator file
+  ansible.builtin.file:
+    path: /etc/iscsi/initiatorname.iscsi
+    state: absent
