@@ -1,0 +1,10 @@
+---
+- name: Remove the katello-ca-consumer package
+  ansible.builtin.dnf:
+    name: katello-ca-consumer
+    state: absent
+
+- name: Remove Katello facts
+  ansible.builtin.file:
+    path: /etc/rhsm/facts/katello.facts
+    state: absent
