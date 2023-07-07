@@ -1,0 +1,27 @@
+---
+- name: Collect list of NIC configs (NetworkManager)
+  ansible.builtin.find:
+    paths: /etc/NetworkManager/system-connections/
+    patterns: '*.nmconnection'
+  register: nmconfigs
+
+- name: Debug nmconfigs when verbosity is 2 or higher
+  debug:
+    var: nmconfigs
+    verbosity: 2
+
+- name: Cleanup HWADDR line from NMConfig File(s)
+  ansible.builtin.lineinfile:
+    path: '{{ item["path"] }}'
+    regexp: '(?i)^hwaddr'
+    state: absent
+  loop: '{{ nmconfigs["files"] }}'
+
+- name: Cleanup UUID line from NMConfig File(s)
+  ansible.builtin.lineinfile:
+    path: '{{ item["path"] }}'
+    regexp: '(?i)^uuid'
+    state: absent
+  loop: '{{ nmconfigs["files"] }}'
+
+
